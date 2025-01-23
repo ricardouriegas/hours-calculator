@@ -1,7 +1,6 @@
 import sys
-from PyQt6.QtWidgets import (
-    QApplication, QVBoxLayout, QHBoxLayout, QLabel, QDateTimeEdit, QPushButton, QWidget, QLineEdit, QTimeEdit
-)
+from PyQt6.QtWidgets import QApplication, QVBoxLayout, QHBoxLayout, QLabel, QDateTimeEdit, QPushButton, QWidget, QLineEdit, QTimeEdit
+
 from PyQt6.QtCore import QDateTime, QTime
 
 class HoursCalculator(QWidget):
@@ -126,17 +125,27 @@ class HoursCalculator(QWidget):
             return
 
         total_seconds = start.msecsTo(end) / 1000
-        total_minutes = int(total_seconds // 60)
         days = int(total_seconds // (24 * 3600))
         total_seconds %= (24 * 3600)
         hours = int(total_seconds // 3600)
         total_seconds %= 3600
         minutes = int(total_seconds // 60)
-        seconds = int(total_seconds % 60)
 
-        self.result_field.setText(
-            f"{days} days, {hours} hours, {minutes} minutes, {seconds} seconds ({total_minutes} total minutes)"
-        )
+        difference_text_parts = []
+        if days > 0:
+            difference_text_parts.append(f"{days} days")
+        if hours > 0:
+            difference_text_parts.append(f"{hours} hours")
+        if minutes > 0:
+            difference_text_parts.append(f"{minutes} minutes")
+        if not difference_text_parts:
+            difference_text_parts.append("Less than a minute")
+
+        total_hours = days * 24 + hours
+        total_minutes = total_hours * 60 + minutes
+
+        difference_text_parts.append(f" or {total_hours} hours or {total_minutes} minutes")
+        self.result_field.setText(", ".join(difference_text_parts))
 
 app = QApplication(sys.argv)
 window = HoursCalculator()
