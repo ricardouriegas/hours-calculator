@@ -1,5 +1,5 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QVBoxLayout, QHBoxLayout, QLabel, QDateTimeEdit, QPushButton, QWidget, QLineEdit, QTimeEdit
+from PyQt6.QtWidgets import QApplication, QVBoxLayout, QHBoxLayout, QLabel, QDateTimeEdit, QPushButton, QWidget, QLineEdit, QTimeEdit, QPlainTextEdit
 
 from PyQt6.QtCore import QDateTime, QTime
 
@@ -41,7 +41,7 @@ class HoursCalculator(QWidget):
         # Result for Time Difference
         time_result_layout = QHBoxLayout()
         time_result_label = QLabel("Difference:")
-        self.time_result_field = QLineEdit()
+        self.time_result_field = QPlainTextEdit()
         self.time_result_field.setReadOnly(True)
         time_result_layout.addWidget(time_result_label)
         time_result_layout.addWidget(self.time_result_field)
@@ -81,7 +81,7 @@ class HoursCalculator(QWidget):
         # Result for Date and Time Difference
         result_layout = QHBoxLayout()
         result_label = QLabel("Difference:")
-        self.result_field = QLineEdit()
+        self.result_field = QPlainTextEdit()
         self.result_field.setReadOnly(True)
         result_layout.addWidget(result_label)
         result_layout.addWidget(self.result_field)
@@ -103,17 +103,16 @@ class HoursCalculator(QWidget):
         end = self.end_time.time()
 
         if start >= end:
-            self.time_result_field.setText("Invalid range")
+            self.time_result_field.setPlainText("Invalid range")
             return
 
         difference = start.msecsTo(end) // 1000  # Convert milliseconds to seconds
         hours = difference // 3600
         minutes = (difference % 3600) // 60
-        seconds = difference % 60
         difference_in_minutes = difference // 60
 
-        self.time_result_field.setText(
-            f"{hours} hours, {minutes} minutes, {seconds} seconds ({difference_in_minutes} total minutes)"
+        self.time_result_field.setPlainText(
+            f"{hours} hours, {minutes} minutes ({difference_in_minutes} total minutes)"
         )
 
     def calculate_difference(self):
@@ -121,7 +120,7 @@ class HoursCalculator(QWidget):
         end = self.end_datetime.dateTime()
 
         if start >= end:
-            self.result_field.setText("Invalid range")
+            self.result_field.setPlainText("Invalid range")
             return
 
         total_seconds = start.msecsTo(end) / 1000
@@ -145,7 +144,7 @@ class HoursCalculator(QWidget):
         total_minutes = total_hours * 60 + minutes
 
         difference_text_parts.append(f" or {total_hours} hours or {total_minutes} minutes")
-        self.result_field.setText(", ".join(difference_text_parts))
+        self.result_field.setPlainText(", ".join(difference_text_parts))
 
 app = QApplication(sys.argv)
 window = HoursCalculator()
