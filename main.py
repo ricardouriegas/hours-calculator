@@ -1,3 +1,15 @@
+"""
+Nombre: Uriegas Ibarra Ricardo Emmanuel
+
+Instalación:
+pip3 install pyqt6
+
+Verificar:
+pip3 show pyqt6
+
+Ejecutar:
+python3 main.py
+"""
 import sys
 from PyQt6.QtWidgets import QApplication, QVBoxLayout, QHBoxLayout, QLabel, QDateTimeEdit, QPushButton, QWidget, QLineEdit, QTimeEdit, QPlainTextEdit
 
@@ -7,7 +19,7 @@ class HoursCalculator(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Hours Calculator")
-        self.setGeometry(100, 100, 400, 300)
+        self.setGeometry(100, 100, 500, 500)
 
         self.init_ui()
 
