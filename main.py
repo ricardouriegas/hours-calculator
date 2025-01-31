@@ -27,7 +27,7 @@ class HoursCalculator(QWidget):
     def init_ui(self):
         layout = QVBoxLayout()
 
-        # section 1 - time
+        ########################## section 1 - time ##########################
         time_layout = QVBoxLayout()
         time_label = QLabel("Calcular diferencia de tiempo (Mismo día):")
 
@@ -65,7 +65,7 @@ class HoursCalculator(QWidget):
         time_layout.addWidget(self.calculate_time_button)
         time_layout.addLayout(time_result_layout)
 
-        # section 2 - date and time
+        ###################### section 2 - date and time ######################
         datetime_layout = QVBoxLayout()
         datetime_label = QLabel("Calcular diferencia entre fechas y horas:")
 
@@ -91,7 +91,7 @@ class HoursCalculator(QWidget):
         self.calculate_button = QPushButton("Calcular diferencia de fecha y hora")
         self.calculate_button.clicked.connect(self.calculate_difference)
 
-        # result field
+        ############################ result field ############################
         result_layout = QHBoxLayout()
         result_label = QLabel("Diferencia:")
         self.result_field = QPlainTextEdit()
@@ -111,6 +111,7 @@ class HoursCalculator(QWidget):
 
         self.setLayout(layout)
 
+    ################################ functions ################################
     # function to calculte the time difference (not the date)
     def calculate_time_difference(self):
         # get the time values
