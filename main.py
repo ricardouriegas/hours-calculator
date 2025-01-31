@@ -19,7 +19,7 @@ from PyQt6.QtCore import QDateTime, QTime
 class HoursCalculator(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Hours Calculator")
+        self.setWindowTitle("Calculadora de Horas")
         self.setGeometry(100, 100, 500, 500)
 
         self.init_ui()
@@ -29,11 +29,11 @@ class HoursCalculator(QWidget):
 
         # section 1 - time
         time_layout = QVBoxLayout()
-        time_label = QLabel("Calculate Time Difference (Same Day):")
+        time_label = QLabel("Calcular diferencia de tiempo (Mismo día):")
 
         # start
         start_time_layout = QHBoxLayout()
-        start_time_label = QLabel("Start Time:")
+        start_time_label = QLabel("Hora de inicio:")
         self.start_time = QTimeEdit()
         self.start_time.setTime(QTime.currentTime())
         start_time_layout.addWidget(start_time_label)
@@ -41,19 +41,19 @@ class HoursCalculator(QWidget):
 
         # end
         end_time_layout = QHBoxLayout()
-        end_time_label = QLabel("End Time:")
+        end_time_label = QLabel("Hora de fin:")
         self.end_time = QTimeEdit()
         self.end_time.setTime(QTime.currentTime())
         end_time_layout.addWidget(end_time_label)
         end_time_layout.addWidget(self.end_time)
 
         # btn
-        self.calculate_time_button = QPushButton("Calculate Time Difference")
+        self.calculate_time_button = QPushButton("Calcular diferencia de tiempo")
         self.calculate_time_button.clicked.connect(self.calculate_time_difference)
 
         # result field
         time_result_layout = QHBoxLayout()
-        time_result_label = QLabel("Difference:")
+        time_result_label = QLabel("Diferencia:")
         self.time_result_field = QPlainTextEdit()
         self.time_result_field.setReadOnly(True)
         time_result_layout.addWidget(time_result_label)
@@ -67,11 +67,11 @@ class HoursCalculator(QWidget):
 
         # section 2 - date and time
         datetime_layout = QVBoxLayout()
-        datetime_label = QLabel("Calculate Difference Between Dates and Times:")
+        datetime_label = QLabel("Calcular diferencia entre fechas y horas:")
 
         # start
         start_layout = QHBoxLayout()
-        start_label = QLabel("Start Date and Time:")
+        start_label = QLabel("Fecha y hora de inicio:")
         self.start_datetime = QDateTimeEdit()
         self.start_datetime.setCalendarPopup(True)
         self.start_datetime.setDateTime(QDateTime.currentDateTime())
@@ -80,7 +80,7 @@ class HoursCalculator(QWidget):
 
         # end
         end_layout = QHBoxLayout()
-        end_label = QLabel("End Date and Time:")
+        end_label = QLabel("Fecha y hora de fin:")
         self.end_datetime = QDateTimeEdit()
         self.end_datetime.setCalendarPopup(True)
         self.end_datetime.setDateTime(QDateTime.currentDateTime())
@@ -88,14 +88,14 @@ class HoursCalculator(QWidget):
         end_layout.addWidget(self.end_datetime)
 
         # btn
-        self.calculate_button = QPushButton("Calculate Date and Time Difference")
+        self.calculate_button = QPushButton("Calcular diferencia de fecha y hora")
         self.calculate_button.clicked.connect(self.calculate_difference)
 
         # result field
         result_layout = QHBoxLayout()
-        result_label = QLabel("Difference:")
+        result_label = QLabel("Diferencia:")
         self.result_field = QPlainTextEdit()
-        self.result_field.setReadOnly(True)
+        self.result_field.setReadOnly(True) # make the field read-only
         result_layout.addWidget(result_label)
         result_layout.addWidget(self.result_field)
 
@@ -113,31 +113,38 @@ class HoursCalculator(QWidget):
 
     # function to calculte the time difference (not the date)
     def calculate_time_difference(self):
+        # get the time values
         start = self.start_time.time()
         end = self.end_time.time()
 
+        # validate the time range
         if start >= end:
-            self.time_result_field.setPlainText("Invalid range")
+            self.time_result_field.setPlainText("Rango inválido")
             return
-
-        difference = start.msecsTo(end) // 1000  # Convert milliseconds to seconds
+        
+        # calculate the difference
+        difference = start.msecsTo(end) // 1000  # convert milliseconds to seconds
         hours = difference // 3600
         minutes = (difference % 3600) // 60
         difference_in_minutes = difference // 60
 
+        # set the result
         self.time_result_field.setPlainText(
-            f"{hours} hours, {minutes} minutes ({difference_in_minutes} total minutes)"
+            f"{hours} horas, {minutes} minutos ({difference_in_minutes} minutos en total)"
         )
 
     # function to calculate the date and time difference
     def calculate_difference(self):
+        # get the date and time values
         start = self.start_datetime.dateTime()
         end = self.end_datetime.dateTime()
 
+        # validation
         if start >= end:
-            self.result_field.setPlainText("Invalid range")
+            self.result_field.setPlainText("Rango inválido")
             return
 
+        # calculate the difference
         total_seconds = start.msecsTo(end) / 1000
         days = int(total_seconds // (24 * 3600))
         total_seconds %= (24 * 3600)
@@ -145,20 +152,23 @@ class HoursCalculator(QWidget):
         total_seconds %= 3600
         minutes = int(total_seconds // 60)
 
+        # create the result text
         difference_text_parts = []
         if days > 0:
-            difference_text_parts.append(f"{days} days")
+            difference_text_parts.append(f"{days} días")
         if hours > 0:
-            difference_text_parts.append(f"{hours} hours")
+            difference_text_parts.append(f"{hours} horas")
         if minutes > 0:
-            difference_text_parts.append(f"{minutes} minutes")
+            difference_text_parts.append(f"{minutes} minutos")
         if not difference_text_parts:
-            difference_text_parts.append("Less than a minute")
+            difference_text_parts.append("Menos de un minuto")
 
+        # total hours and minutes 
         total_hours = days * 24 + hours
         total_minutes = total_hours * 60 + minutes
 
-        difference_text_parts.append(f" or {total_hours} hours or {total_minutes} minutes")
+        # add the total hours and minutes to the result
+        difference_text_parts.append(f" o {total_hours} horas o {total_minutes} minutos")
         self.result_field.setPlainText(", ".join(difference_text_parts))
 
 # main
